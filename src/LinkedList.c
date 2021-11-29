@@ -544,3 +544,44 @@ LinkedList* ll_filter(LinkedList *this, int (*fn)(void *element))
 	}
 	return listaFiltrada;
 }
+
+int ll_map(LinkedList *this, int (*fn)(void *element))
+{
+	int retorno;
+	int tam;
+	void *aux;
+
+	retorno = -1;
+	if(this != NULL && fn != NULL)
+	{
+		tam = ll_len(this);
+		for(int i = 0; i < tam; i++)
+		{
+			aux = ll_get(this, i);
+			if(fn(aux) == 1)
+			{
+				retorno = 0;
+			}
+		}
+	}
+	return retorno;
+}
+
+LinkedList* ll_map2(LinkedList *this, int (*fn)(void *element))
+{
+	LinkedList *retorno = ll_newLinkedList();
+	int tam;
+	void *aux;
+
+	if(this != NULL && fn != NULL)
+	{
+		tam = ll_len(this);
+		for(int i = 0; i < tam; i++)
+		{
+			aux = ll_get(this, i);
+			fn(aux);
+			ll_add(retorno, aux);
+		}
+	}
+	return retorno;
+}

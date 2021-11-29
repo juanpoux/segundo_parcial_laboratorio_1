@@ -20,3 +20,6 @@ int controller_EditMinotauro(void *pElement);
 int controller_sortLibros(LinkedList *lista, LinkedList *listaEditoriales);
 int controller_loadLibrosFromTextExcel(char *path, LinkedList *listaLibros);
 int controller_saveAsTextExcel(char *path, LinkedList *lista);
+int controller_criterioMap(void *pElement);
+int controller_mapLibros(char *path, LinkedList *listaLibros, LinkedList *listaEditoriales, LinkedList *listaMap);
+int controller_mapLibros2(char *path, LinkedList *listaLibros, LinkedList *listaEditoriales, LinkedList *listaMap);

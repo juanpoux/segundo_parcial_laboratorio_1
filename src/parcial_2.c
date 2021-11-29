@@ -15,6 +15,7 @@
 #define ARCHIVOEDITORIALES "Editoriales.csv"
 #define ARCHIVOMINOTAURO "EditorialMinotauro.csv"
 #define ARCHIVOLIBROSEXCEL "LibrosEXCEL.csv"
+#define ARCHIVOMAPEADO "mapeado.csv"
 
 int main(void)
 {
@@ -23,6 +24,7 @@ int main(void)
 	LinkedList *listaLibros = ll_newLinkedList();
 	LinkedList *listaEditoriales = ll_newLinkedList();
 	LinkedList *listaMinotauro = ll_newLinkedList();
+	LinkedList *listaMap = ll_newLinkedList();
 	int salir;
 	char archivoLibros[50] = "Libros.csv";
 	char archivoEditoriales[50] = "Editoriales.csv";
@@ -34,7 +36,7 @@ int main(void)
 		case 1:
 			if(ll_isEmpty(listaLibros) == 1)
 			{
-			PedirCadena("Ingrese el nombre del archivo que desea abrir: ", archivoLibros, 50);
+//				PedirCadena("Ingrese el nombre del archivo que desea abrir: ", archivoLibros, 50);
 				switch(controller_loadLibrosFromText(archivoLibros, listaLibros))
 				{
 				case -1:
@@ -58,7 +60,7 @@ int main(void)
 		case 2:
 			if(ll_isEmpty(listaEditoriales) == 1)
 			{
-			PedirCadena("Ingrese el nombre del archivo que desea abrir: ", archivoEditoriales, 50);
+//				PedirCadena("Ingrese el nombre del archivo que desea abrir: ", archivoEditoriales, 50);
 				switch(controller_loadEditorialesFromText(archivoEditoriales, listaEditoriales))
 				{
 				case -1:
@@ -137,8 +139,18 @@ int main(void)
 			}
 			break;
 		case 6:
+//			controller_mapLibros(ARCHIVOMAPEADO, listaLibros, listaEditoriales, listaMap);
+			listaMap = ll_map2(listaLibros, controller_criterioMap);
+			controller_ListLibrosConNombreEditorial(listaMap, listaEditoriales);
+			controller_saveAsText(ARCHIVOMAPEADO, listaMap);
+			break;
+		case 7:
 //			controller_saveAsText(ARCHIVOLIBROS, listaLibros);
 //			controller_saveAsTextExcel(ARCHIVOLIBROSEXCEL, listaLibros);
+			ll_deleteLinkedList(listaLibros);
+			ll_deleteLinkedList(listaEditoriales);
+			ll_deleteLinkedList(listaMinotauro);
+			ll_deleteLinkedList(listaMap);
 			PedirEnteroP(&salir, "\n1) Salir \n2) Cancelar \nIngrese una opcion: ", "Error, ingreso invalido\n ", 1, 2);
 			break;
 		}

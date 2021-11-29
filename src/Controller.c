@@ -77,7 +77,6 @@ int controller_loadEditorialesFromText(char *path, LinkedList *listaEditoriales)
 	return retorno;
 }
 
-
 //int controller_ListLibros(LinkedList *listaLibros)
 //{
 //	int retorno;
@@ -177,7 +176,8 @@ int controller_menuDeOpciones()
 					"\n4. Imprimir por pantalla todos los datos de los libros "
 					"\n5. Realizar un listado de los libros de la editorial MINOTAURO. Para ello deberá utilizar la "
 					"función ll_filter* del LinkedList. Guardar el listado en un archivo csv. "
-					"\n6. Salir: ", "error ", 0, 6);
+					"\n6. Generar el archivo de salida “mapeado.csv” luego de aplicar la función map. "
+					"\n7. Salir: \nIngrese una opcion:", "error ", 1, 7);
 
 	return retorno;
 }
@@ -347,21 +347,64 @@ int controller_sortLibros(LinkedList *lista, LinkedList *listaEditoriales)
 			PedirEnteroP(&order, "1) Ordenar de A a Z \n0) Ordenar de Z a A \nIngrese una opcion: ", "Error, ingreso invalido \n", 0, 1);
 			ll_sort(aux, libros_compararTitulos, order);
 			break;
-			case 3:
-			 puts("\t  *************** Ordenar por precio ***************");
-			 PedirEnteroP(&order, "1) Ordenar de forma ascendente \n0) Ordenar de forma descendente \nIngrese una opcion: ",
-			 "Error, ingreso invalido \n", 0, 1);
-			 ll_sort(aux, libros_compararPrecio, order);
-			 break;
-			 case 4:
-			 puts("\t  *************** Ordenar por ID ***************");
-			 PedirEnteroP(&order, "1) Ordenar de forma ascendente \n0) Ordenar de forma descendente \nIngrese una opcion: ",
-			 "Error, ingreso invalido \n", 0, 1);
-			 ll_sort(aux, libros_compararId, order);
-			 break;
+		case 3:
+			puts("\t  *************** Ordenar por precio ***************");
+			PedirEnteroP(&order, "1) Ordenar de forma ascendente \n0) Ordenar de forma descendente \nIngrese una opcion: ",
+					"Error, ingreso invalido \n", 0, 1);
+			ll_sort(aux, libros_compararPrecio, order);
+			break;
+		case 4:
+			puts("\t  *************** Ordenar por ID ***************");
+			PedirEnteroP(&order, "1) Ordenar de forma ascendente \n0) Ordenar de forma descendente \nIngrese una opcion: ",
+					"Error, ingreso invalido \n", 0, 1);
+			ll_sort(aux, libros_compararId, order);
+			break;
 		}
 		controller_ListLibrosConNombreEditorial(aux, listaEditoriales);
 		ll_deleteLinkedList(aux);
+	}
+	return retorno;
+}
+
+int controller_criterioMap(void *pElement)
+{
+	int retorno = 0;
+	eLibro *aux;
+	int idEdi;
+	int precio;
+	int precioConDesc;
+
+	aux = (eLibro*) pElement;
+	libros_getIdEditorial(aux, &idEdi);
+	libros_getPrecio(aux, &precio);
+	if(idEdi == 1 && precio > 299)
+	{
+		precioConDesc = RealizarDescuentoEnteros(precio, 30);
+		libros_setPrecio(aux, precioConDesc);
+		retorno = 1;
+	}
+	if(idEdi == 2 && precio < 201)
+	{
+		precioConDesc = RealizarDescuentoEnteros(precio, 10);
+		libros_setPrecio(aux, precioConDesc);
+		retorno = 1;
+	}
+	return retorno;
+}
+
+int controller_mapLibros(char *path, LinkedList *listaLibros, LinkedList *listaEditoriales, LinkedList *listaMap)
+{
+	int retorno = -1;
+
+	if(path != NULL && listaLibros != NULL && listaEditoriales != NULL && listaMap != NULL)
+	{
+		retorno = 0;
+
+		listaMap = ll_clone(listaLibros);
+		ll_map(listaMap, controller_criterioMap);
+
+//		controller_ListLibrosConNombreEditorial(listaMap, listaEditoriales);
+		controller_saveAsText(path, listaMap);
 	}
 	return retorno;
 }

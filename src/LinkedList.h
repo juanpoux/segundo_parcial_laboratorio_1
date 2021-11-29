@@ -53,3 +53,5 @@ LinkedList* ll_subList(LinkedList* this,int from,int to); //crea una sublista de
 LinkedList* ll_clone(LinkedList* this); //hace una copia de la lista entera
 int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order); //ordenamiento por puntero a funcion con el criterio que arme en la funcion
 LinkedList* ll_filter(LinkedList *this, int (*fn)(void *element));
+int ll_map(LinkedList *this, int (*fn)(void *element));
+LinkedList* ll_map2(LinkedList *this, int (*fn)(void *element));
